@@ -1,6 +1,6 @@
-package com.Ayush.Spring_REST.Controller;
+package com.Ayush.Spring_REST.controller;
 
-import com.Ayush.Spring_REST.Entity.Todo;
+import com.Ayush.Spring_REST.entity.Todo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Todo")
-public class CRUD {
+public class TodoController {
 
     @GetMapping("/")
     public String[] home() {
