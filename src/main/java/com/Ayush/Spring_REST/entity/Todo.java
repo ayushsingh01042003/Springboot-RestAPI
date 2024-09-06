@@ -12,7 +12,7 @@ public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto increment
     @Column(name = "todo_id")
-    private int todoId;
+    private Integer todoId;
     @Column(nullable = false, unique = true)
     private String title;
     @Column(nullable = false)
