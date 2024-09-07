@@ -1,5 +1,6 @@
 package com.Ayush.Spring_REST.service;
 
+import com.Ayush.Spring_REST.dto.TodoDTO;
 import com.Ayush.Spring_REST.entity.Todo;
 import com.Ayush.Spring_REST.repository.TodoRepository;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,25 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void deleteTodoById(Integer Id) {
         todoRepository.deleteById(Id);
+    }
+
+    @Override
+    public Todo convertToEntity(TodoDTO dto) {
+        Todo todo = new Todo();
+        todo.setTodoId(dto.getTodoId());
+        todo.setCompleted(dto.isCompleted());
+        todo.setDescription(dto.getDescription());
+        todo.setTitle(dto.getTitle());
+        return todo;
+    }
+
+    @Override
+    public TodoDTO convertToDTO(Todo todo) {
+        TodoDTO dto = new TodoDTO();
+        dto.setTodoId(todo.getTodoId());
+        dto.setTitle(todo.getTitle());
+        dto.setDescription(todo.getDescription());
+        dto.setCompleted(todo.isCompleted());
+        return dto;
     }
 }

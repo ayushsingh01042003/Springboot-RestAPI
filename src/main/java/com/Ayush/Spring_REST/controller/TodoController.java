@@ -1,15 +1,24 @@
 package com.Ayush.Spring_REST.controller;
 
+import com.Ayush.Spring_REST.dto.TodoDTO;
 import com.Ayush.Spring_REST.entity.Todo;
+import com.Ayush.Spring_REST.service.TodoService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/Todo")
 public class TodoController {
+
+    TodoService todoService;
+
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     @GetMapping("/")
     public String[] home() {
@@ -17,35 +26,47 @@ public class TodoController {
     }
 
     @GetMapping("/getAllTodos")
-    public List<Todo> getAllTodos() {
-        return null;
+    public ResponseEntity<List<TodoDTO>> getAllTodos() {
+        List<Todo> todoList = todoService.getAllTodos();
+        List<TodoDTO> todoDTOs = new ArrayList<>();
+
+        for(Todo todo : todoList) {
+            todoDTOs.add(todoService.convertToDTO(todo));
+        }
+
+        return new ResponseEntity<>(todoDTOs, HttpStatus.OK);
     }
 
-    @GetMapping("/getTodo/{ID}")
-    public ResponseEntity<Object> getTodo(@PathVariable("ID") int todoID) {
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .body("Todo ID does not exist");
+    @GetMapping("/getTodo/{todoId}")
+    public ResponseEntity<TodoDTO> getTodo(@PathVariable Integer todoId) {
+        Optional<Todo> todo = todoService.getTodoById(todoId);
+        if(todo.isPresent()) {
+            TodoDTO todoDTO = todoService.convertToDTO(todo.get());
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(todoDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/createTodo")
-    public ResponseEntity<String> createTodo(@RequestBody Todo todo) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body("Created Successfully: " + todo);
+    public ResponseEntity<TodoDTO> createTodo(@RequestBody Todo todo) {
+        TodoDTO todoDTO = todoService.convertToDTO(todoService.createTodo(todo));
+        return new ResponseEntity<>(todoDTO, HttpStatus.OK);
     }
 
-    @PutMapping("/updateTodo")
-    public ResponseEntity<Object> updateTodo(@RequestParam int ID) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body("Todo ID does not exist");
+    @PutMapping("/updateTodo/{todoId}")
+    public ResponseEntity<TodoDTO> updateTodo(@PathVariable Integer todoId, @RequestBody TodoDTO todoDTO) {
+        return new ResponseEntity<>(todoService.convertToDTO(
+            todoService.updateTodo(
+                todoId, todoService.convertToEntity(todoDTO))), 
+                HttpStatus.OK
+            );
     }
 
-    @DeleteMapping("/deleteTodo")
-    public ResponseEntity<String> deleteTodo(@RequestParam int ID) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body("Not found");
+    @DeleteMapping("/deleteTodo/{todoId}")
+    public ResponseEntity<String> deleteTodo(@PathVariable Integer todoId) {
+        todoService.deleteTodoById(todoId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
