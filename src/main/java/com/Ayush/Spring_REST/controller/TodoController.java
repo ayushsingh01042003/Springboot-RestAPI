@@ -20,11 +20,6 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    @GetMapping("/")
-    public String[] home() {
-        return new String[]{"Str1", "Str2", "Str3"};
-    }
-
     @GetMapping("/getAllTodos")
     public ResponseEntity<List<TodoDTO>> getAllTodos() {
         List<Todo> todoList = todoService.getAllTodos();
@@ -43,7 +38,7 @@ public class TodoController {
         if(todo.isPresent()) {
             TodoDTO todoDTO = todoService.convertToDTO(todo.get());
             return ResponseEntity
-                    .status(HttpStatus.OK)
+                    .status(HttpStatus.CREATED)
                     .body(todoDTO);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

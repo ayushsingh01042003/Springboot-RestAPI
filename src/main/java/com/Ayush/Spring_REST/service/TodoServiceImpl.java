@@ -2,6 +2,7 @@ package com.Ayush.Spring_REST.service;
 
 import com.Ayush.Spring_REST.dto.TodoDTO;
 import com.Ayush.Spring_REST.entity.Todo;
+import com.Ayush.Spring_REST.exception.TodoNotFoundException;
 import com.Ayush.Spring_REST.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class TodoServiceImpl implements TodoService {
             existingTodo.setCompleted(updatedTodo.isCompleted());
             return todoRepository.save(existingTodo);
         } else {
-            throw new RuntimeException("Todo not found with id: " + Id);
+            throw new TodoNotFoundException("Todo not found with id: " + Id);
         }
     }
 
