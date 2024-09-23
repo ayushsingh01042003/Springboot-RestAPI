@@ -3,7 +3,7 @@ package com.Ayush.Spring_REST.dto;
 import lombok.Data;
 
 @Data
-public class AuthRequest {
+public class LoginRequest {
     private String username;
     private String password;
 }
