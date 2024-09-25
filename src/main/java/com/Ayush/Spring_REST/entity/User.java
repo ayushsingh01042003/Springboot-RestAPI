@@ -2,8 +2,10 @@ package com.Ayush.Spring_REST.entity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -34,6 +36,9 @@ public class User implements UserDetails {
     private String roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return  List.of(userInfo.getRoles().split(","))
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }
