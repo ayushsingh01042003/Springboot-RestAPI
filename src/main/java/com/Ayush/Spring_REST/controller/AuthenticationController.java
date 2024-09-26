@@ -24,22 +24,4 @@ public class AuthenticationController {
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
     }
-
-    @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody SignupRequest request) {
-        User registeredUser = authenticationService.signup(request);
-
-        return ResponseEntity.ok(registeredUser);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest request) {
-        User authenticatedUser = authenticationService.authenticate(request);
-
-        String jwtToken = jwtService.generateToken(authenticatedUser);
-
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
-
-        return ResponseEntity.ok(loginResponse);
-    }
 }

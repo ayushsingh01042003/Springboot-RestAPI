@@ -1,5 +1,7 @@
 package com.Ayush.Spring_REST.service;
 
+import java.util.Date;
+
 import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,8 +10,8 @@ import io.jsonwebtoken.Claims;
 
 public interface JwtService {
     String extractUsername(String token);
-    String generateToken(UserDetails userDetails);
+    String generateToken(String username);
+    Date extractExpiDate(String token);
     <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
-    long getExpirationTime();
-    boolean isTokenValid(String token, UserDetails userDetails);
+    boolean validateToken(String token, UserDetails userDetails);
 }
