@@ -13,26 +13,25 @@ import com.Ayush.Spring_REST.repository.UserRepository;
 @Service
 public class UserServiceImp implements UserService {
 
-    private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UserServiceImp(PasswordEncoder passwordEncoder, UserRepository userRepository) {
-        this.passwordEncoder = passwordEncoder;
+    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Optional<User> userDetails = userRepository.findByUsername(username);
-        // return userDetails.map()
-        return null;    
+        Optional<User> userDetail = userRepository.findByUsername(username);
+        return userDetail.map(UserInfoDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     @Override
     public String addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return "User Added Successfully";
+        return "User added Successfully";
     }
-    
 }
