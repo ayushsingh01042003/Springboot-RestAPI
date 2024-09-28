@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.Ayush.Spring_REST.entity.User;
 import com.Ayush.Spring_REST.repository.UserRepository;
 
+import lombok.NoArgsConstructor;
+
 @Service
+@NoArgsConstructor
 public class UserServiceImp implements UserService {
 
     private UserRepository userRepository;
