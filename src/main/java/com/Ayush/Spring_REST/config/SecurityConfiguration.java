@@ -16,8 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.Ayush.Spring_REST.service.UserServiceImp;
+import com.Ayush.Spring_REST.service.CustomUserDetailsService;
 
 @Configuration
 @EnableMethodSecurity
@@ -26,9 +25,12 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationFilter authenticationFilter;
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Bean
     UserDetailsService userDetailsService() {
-        return new UserServiceImp();
+        return customUserDetailsService;
     }
 
     @Bean
@@ -36,7 +38,7 @@ public class SecurityConfiguration {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/welcome", "/auth/addNewUser", "/auth/generateToken").permitAll()
+                .requestMatchers("/auth/welcome", "/auth/Signup", "/auth/Login").permitAll()
                 .requestMatchers("/auth/user/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
